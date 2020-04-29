@@ -4,9 +4,21 @@ import jsonPlaceholder from '../apis/jsonPlaceholder';
 export const fetchPostsAndUsers = () => async (dispatch, getState) => {
   await dispatch(fetchPosts());
 
+  // _.map is LODASH VERSION OF MAP _.uniq returns only unique IDs
   const userIds = _.uniq(_.map(getState().posts, 'userId'))
   userIds.forEach(id => dispatch(fetchUser(id)));
 };
+
+// // BELOW IS A REFACTORED VERSION OF ABOVE CODE 
+// export const fetchPostsAndUsers = () => async (dispatch, getState) => {
+//   await dispatch(fetchPosts());
+
+//   _.chain(getState().posts)
+//     .map('userId')
+//     .uniq()
+//     .forEach(id => dispatch(fetchUser(id)))
+//     .value();
+// };
 
 export const fetchPosts = () => async (dispatch) => {
     const response = await jsonPlaceholder.get('/posts');
